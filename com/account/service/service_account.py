@@ -1,5 +1,12 @@
-from com.account.model.account import Account
 from com.account.service.i_service_account import IServiceAccount
+from tools.general import is_absolute_equal
+from tools.name_check import NameCheck
+from tools.data_check import DataCheck
+from tools.user_check import UserCheck
+from tools.email_check import EmailCheck
+from tools.pass_check import PassCheck
+from tools.mobile_check import MobileCheck
+from com.account.model.account import Account
 
 
 class ServiceAccount(IServiceAccount):
@@ -31,7 +38,10 @@ class ServiceAccount(IServiceAccount):
         Returns:
             bool: True se for criado.
         """
-        pass
+        if not isinstance(account, Account):
+            return False
+        elif not self._cheker_for_create_update(account=account):
+            return False
 
     def read_account(self, **kwargs) -> list:
         """Esse metodo tentará entrar no aplicativo
@@ -40,7 +50,8 @@ class ServiceAccount(IServiceAccount):
         Returns:
             list: Account list se encontrado else None.
         """
-        pass
+        if not kwargs:
+            return False
 
     def update_account(self, account: Account) -> bool:
         """Esse metodo tentará Atualizar Account.
@@ -52,7 +63,12 @@ class ServiceAccount(IServiceAccount):
         Returns:
             bool: True se for atualizado.
         """
-        pass
+        if not isinstance(account, Account):
+            return False
+        elif not account.id > 0:
+            return False
+        elif not self._cheker_for_create_update(account=account):
+            return False
 
     def delete_account(self, account: Account) -> bool:
         """Esse metodo tentará Deletar Account.
@@ -64,4 +80,38 @@ class ServiceAccount(IServiceAccount):
         Returns:
             bool: True se for deletado.
         """
-        pass
+        if not isinstance(account, Account):
+            return False
+        elif not account.id > 0:
+            return False
+
+    def _cheker_for_create_update(self, account: Account) -> bool:
+        """Esse metodo serve para economizar linhas de codigo
+        entre create e update.
+
+        Args:
+            account (Account): Account instance.
+
+        Returns:
+            bool: True se dados okay.
+        """
+        if not NameCheck.is_name_okay(word=account.nome):
+            return False
+        elif not NameCheck.is_name_okay(word=account.sexo):
+            return False
+        elif not is_absolute_equal(word=account.sexo, compare='feminino') \
+            and not is_absolute_equal(word=account.sexo, compare='masculino') \
+                and not is_absolute_equal(word=account.sexo, compare='hidden'):
+            return False
+        elif not DataCheck.is_valid_data(data=account.nasc):
+            return False
+        elif not UserCheck.validar_nome_usuario(usuario=account.user):
+            return False
+        elif not EmailCheck.email_is_valid(email=account.email):
+            return False
+        elif not PassCheck.verifica_senha_app(senha=account.passw):
+            return False
+        elif not MobileCheck.mobile_valid(mobile=account.mobile):
+            return False
+        else:
+            return True

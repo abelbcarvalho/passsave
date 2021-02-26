@@ -58,6 +58,14 @@ class Account(AbsModel):
         self._user = user
 
     @property
+    def email(self) -> str:
+        return self._email
+
+    @email.setter
+    def email(self, email: str) -> None:
+        self._email = email
+
+    @property
     def passw(self) -> str:
         return self._passw
 

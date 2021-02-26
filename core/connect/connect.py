@@ -19,7 +19,7 @@ class Connect:
         """Criando as Tabelas pelos modelos.
         """
         model = 'create table if not exists {} ('
-        table = model + '{},' * 9
+        table = model + '{},' * 10
         table = table[: -1] + ');'
         table = table.format(
             'tbAccount',
@@ -32,6 +32,7 @@ class Connect:
             'user varchar(80) not null',
             'email varchar(80) not null',
             'passw varchar(80) not null',
+            'mobile varchar(80) not null',
         )
         tables = (table, )
         table = model + '{},' * 11

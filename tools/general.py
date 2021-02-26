@@ -168,3 +168,20 @@ def str_can_int_float(word='') -> bool:
         return True
     except ValueError:
         return False
+
+
+def is_absolute_equal(word='', compare='') -> bool:
+    """Compara duas strs em lower se são iguais.
+
+    Args:
+        word (str, optional): palavra. Defaults to ''.
+        compare (str, optional): compara. Defaults to ''.
+
+    Returns:
+        bool: True se uma palavra lower for igual a outra.
+    """
+    if not isinstance(word, str) or not isinstance(compare, str):
+        return False
+    word = word.lower()
+    compare = compare.lower()
+    return word.__eq__(compare)
