@@ -39,6 +39,15 @@ class DataCheck:
 
     @classmethod
     def _bisexto(cls, ano: int) -> bool:
+        """Esse metodo verifica se um determinado
+        ano é bisexto.
+
+        Args:
+            ano (int): ano.
+
+        Returns:
+            bool: True se ano bisexto.
+        """
         if ano % 400 == 0:
             return True
         elif ano % 4 == 0 and ano % 100 != 0:
@@ -48,9 +57,20 @@ class DataCheck:
 
     @classmethod
     def _mes_trinta(cls, mes: int) -> bool:
+        """Esse metodo simula um switch onde é verificado 
+        se um mes tem 30 ou 31 dias.
+
+        Args:
+            mes (int): mes.
+
+        Returns:
+            bool: True se mes tem 30 dias.
+        """
+        if mes == 2:
+            return False
         trinta = {
             (4,6,9,11): True,
             (1,3,5,7,8,10,12): False,
         }
-        found = (m for meses, m in trinta.items() if mes in meses)
-        return next(found, None)
+        tinta = (m for meses, m in trinta.items() if mes in meses)
+        return next(trinta, None)
