@@ -3,6 +3,8 @@ from com.account.model.account import Account
 from com.account.service.service_account import ServiceAccount
 from com.login.model.login import Login
 from com.login.service.service_login import ServiceLogin
+from com.info.model.info import Info
+from com.info.service.service_info import ServiceInfo
 
 
 class Facade(IFacade):
@@ -18,6 +20,7 @@ class Facade(IFacade):
 
     _serv_acc = ServiceAccount()
     _serv_log = ServiceLogin()
+    _serv_inf = ServiceInfo()
 
     def __init__(self) -> None:
         """Nova Fachada.
@@ -121,3 +124,52 @@ class Facade(IFacade):
         return self._serv_log.delete_login(login=login)
 
     # Fim Login Part
+
+    # Info Part
+
+    def create_info(self, info: Info) -> bool:
+        """Esse metodo tentará Criar Info.
+
+        Args:
+            info (info): instância com dados
+            necessários.
+
+        Returns:
+            bool: True se for criado.
+        """
+        return self._serv_inf.create_info(info=info)
+
+    def read_info(self, **kwargs) -> list:
+        """Esse metodo servirá para realizar
+        busca de Infos.
+
+        Returns:
+            list: lista de Infos ou None.
+        """
+        return self._serv_inf.read_info(**kwargs)
+
+    def update_info(self, info: Info) -> bool:
+        """Esse metodo tentará Atualizar Info.
+
+        Args:
+            info (info): instância com dados
+            necessários.
+
+        Returns:
+            bool: True se for atualizado.
+        """
+        return self._serv_inf.update_info(info=info)
+
+    def delete_info(self, info: Info) -> bool:
+        """Esse metodo tentará Deletar Info.
+
+        Args:
+            info (info): instância com dados
+            necessários.
+
+        Returns:
+            bool: True se for deletado.
+        """
+        return self._serv_inf.delete_info(info=info)
+
+    # Fim Info Part

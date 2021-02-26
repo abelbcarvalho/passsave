@@ -1,6 +1,7 @@
 from abc import ABCMeta
 from com.account.model.account import Account
 from com.login.model.login import Login
+from com.info.model.info import Info
 
 
 class IFacade(metaclass=ABCMeta):
@@ -44,3 +45,19 @@ class IFacade(metaclass=ABCMeta):
         pass
 
     # Fim de Login
+
+    # Info Part
+
+    def create_info(self, info: Info) -> bool:
+        pass
+
+    def read_info(self, **kwargs) -> list:
+        pass
+
+    def update_info(self, info: Info) -> bool:
+        pass
+
+    def delete_info(self, info: Info) -> bool:
+        pass
+
+    # Fim Info Part
