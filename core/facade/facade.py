@@ -1,6 +1,8 @@
 from core.facade.i_facade import IFacade
 from com.account.model.account import Account
 from com.account.service.service_account import ServiceAccount
+from com.login.model.login import Login
+from com.login.service.service_login import ServiceLogin
 
 
 class Facade(IFacade):
@@ -15,6 +17,7 @@ class Facade(IFacade):
     """
 
     _serv_acc = ServiceAccount()
+    _serv_log = ServiceLogin()
 
     def __init__(self) -> None:
         """Nova Fachada.
@@ -68,4 +71,53 @@ class Facade(IFacade):
         """
         return self._serv_acc.delete_account(account=account)
 
-    # Fim Account Part 
+    # Fim Account Part
+
+    # Login Part
+
+    def create_login(self, login: Login) -> bool:
+        """Esse metodo tentará Criar Login.
+
+        Args:
+            login (Login): instância com dados
+            necessários.
+
+        Returns:
+            bool: True se for criado.
+        """
+        return self._serv_log.create_login(login=login)
+
+    def read_login(self, **kwargs) -> list:
+        """Esse metodo servirá para realizar
+        busca de logins.
+
+        Returns:
+            list: lista de Logins ou None.
+        """
+        return self._serv_log.read_login(**kwargs)
+
+    def update_login(self, login: Login) -> bool:
+        """Esse metodo tentará Atualizar Login.
+
+        Args:
+            login (Login): instância com dados
+            necessários.
+
+        Returns:
+            bool: True se for atualizado.
+        """
+        return self._serv_log.update_login(login=login)
+
+    def delete_login(self, login: Login) -> bool:
+        """Esse metodo tentará Deletar Login.
+
+        Args:
+            login (Login): instância com dados
+            necessários.
+
+        Returns:
+            bool: True se for deletado.
+        """
+        return self._serv_log.delete_login(login=login)
+
+    # Fim Login Part
