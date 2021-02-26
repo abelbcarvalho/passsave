@@ -1,5 +1,6 @@
 from com.account.service.i_service_account import IServiceAccount
-from tools.general import is_absolute_equal
+from tools.general import is_absolute_equal, is_great_than
+from tools.general import is_none_empty
 from tools.name_check import NameCheck
 from tools.data_check import DataCheck
 from tools.user_check import UserCheck
@@ -51,7 +52,7 @@ class ServiceAccount(IServiceAccount):
             list: Account list se encontrado else None.
         """
         if not kwargs:
-            return False
+            return None
 
     def update_account(self, account: Account) -> bool:
         """Esse metodo tentará Atualizar Account.
@@ -95,7 +96,15 @@ class ServiceAccount(IServiceAccount):
         Returns:
             bool: True se dados okay.
         """
-        if not NameCheck.is_name_okay(word=account.nome):
+        if is_none_empty(word=account.nome):
+            return False
+        elif is_none_empty(word=account.sexo):
+            return False
+        elif is_great_than(word=account.nome, size=45):
+            return False
+        elif is_great_than(word=account.sexo, size=9):
+            return False
+        elif not NameCheck.is_name_okay(word=account.nome):
             return False
         elif not NameCheck.is_name_okay(word=account.sexo):
             return False
