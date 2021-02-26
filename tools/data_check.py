@@ -4,12 +4,14 @@ from datetime import datetime as date
 
 class DataCheck:
     """Clase para teste de data.
+    [Somente com Metodos de Classe.]
 
     Author:
         abelbcarvalho
     """
 
-    def is_valid_data(self, data: Data) -> bool:
+    @classmethod
+    def is_valid_data(cls, data: Data) -> bool:
         """Testa e verifica se uma data é válida.
 
         Args:
@@ -27,15 +29,16 @@ class DataCheck:
         elif data.mes == 2:
             if data.dia > 29:
                 return False
-            elif not self._bisexto(ano=data.ano):
+            elif not cls._bisexto(ano=data.ano):
                 return False if data.dia > 28 else True
             return True   
-        elif self._mes_trinta(mes=data.mes):
+        elif cls._mes_trinta(mes=data.mes):
             return data.dia < 31
         else:
             return data.dia < 32
 
-    def _bisexto(self, ano: int) -> bool:
+    @classmethod
+    def _bisexto(cls, ano: int) -> bool:
         if ano % 400 == 0:
             return True
         elif ano % 4 == 0 and ano % 100 != 0:
@@ -43,7 +46,8 @@ class DataCheck:
         else:
             return False
 
-    def _mes_trinta(self, mes: int) -> bool:
+    @classmethod
+    def _mes_trinta(cls, mes: int) -> bool:
         trinta = {
             (4,6,9,11): True,
             (1,3,5,7,8,10,12): False,
