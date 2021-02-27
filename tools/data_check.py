@@ -72,5 +72,5 @@ class DataCheck:
             (4,6,9,11): True,
             (1,3,5,7,8,10,12): False,
         }
-        tinta = (m for meses, m in trinta.items() if mes in meses)
-        return next(trinta, None)
+        meses30 = (m for meses, m in trinta.items() if mes in meses)
+        return next(meses30, None)

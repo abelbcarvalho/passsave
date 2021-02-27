@@ -17,6 +17,7 @@ class DAOBase(IDAOBase):
         """Novo DAOBase.
         """
         super().__init__()
+        Connect.create_tables()
 
     # metodos crud
 
@@ -32,6 +33,7 @@ class DAOBase(IDAOBase):
         try:
             Connect.open_connection()
             Connect.cursor().execute(sql, args)
+            Connect.conexao().commit()
             return True
         except Exception as ex:
             print(ex)
@@ -73,6 +75,7 @@ class DAOBase(IDAOBase):
         try:
             Connect.open_connection()
             Connect.cursor().execute(sql, args)
+            Connect.conexao().commit()
             return True
         except Exception as ex:
             print(ex)
@@ -92,6 +95,7 @@ class DAOBase(IDAOBase):
         try:
             Connect.open_connection()
             Connect.cursor().execute(sql, args)
+            Connect.conexao().commit()
             return True
         except Exception as ex:
             print(ex)

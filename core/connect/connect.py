@@ -70,6 +70,7 @@ class Connect:
             cls.open_connection()
             for table in tables:
                 cls.cursor().execute(table)
+            cls.conexao().commit()
         except Exception as ex:
             print(ex)
             return None
