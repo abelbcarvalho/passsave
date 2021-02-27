@@ -45,6 +45,9 @@ class IFacade(metaclass=ABCMeta):
     def delete_login(self, login: Login) -> bool:
         pass
 
+    def delete_all_login(self, sql='', fk=0) -> bool:
+        pass
+
     # Fim de Login
 
     # Info Part

@@ -126,6 +126,19 @@ class Facade(IFacade):
         """
         return self._serv_log.delete_login(login=login)
 
+    def delete_all_login(self, sql='', fk=0) -> bool:
+        """Esse metodo tenta deletar todas as contas
+        de usuário de uma pessoa no aplicativo.
+
+        Args:
+            sql (str, optional): sql query. Defaults to ''.
+            fk (int, optional): chave estrangeira. Defaults to 0.
+
+        Returns:
+            bool: True se deletado.
+        """
+        return self._serv_log.delete_all_login(sql=sql, fk=fk)
+
     # Fim Login Part
 
     # Info Part
