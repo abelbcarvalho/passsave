@@ -2,6 +2,7 @@ from abc import ABCMeta
 from com.account.model.account import Account
 from com.login.model.login import Login
 from com.info.model.info import Info
+from com.passgen.model.passgen import PassGen
 
 
 class IFacade(metaclass=ABCMeta):
@@ -60,4 +61,11 @@ class IFacade(metaclass=ABCMeta):
     def delete_info(self, info: Info) -> bool:
         pass
 
-    # Fim Info Part
+    # Fim de Info
+
+    # PassGen Part
+    
+    def generate_password(self, passgen: PassGen) -> str:
+        pass
+
+    # Fim de PassGen

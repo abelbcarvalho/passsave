@@ -5,6 +5,8 @@ from com.login.model.login import Login
 from com.login.service.service_login import ServiceLogin
 from com.info.model.info import Info
 from com.info.service.service_info import ServiceInfo
+from com.passgen.model.passgen import PassGen
+from com.passgen.service.service_passgen import ServicePassGen
 
 
 class Facade(IFacade):
@@ -21,6 +23,7 @@ class Facade(IFacade):
     _serv_acc = ServiceAccount()
     _serv_log = ServiceLogin()
     _serv_inf = ServiceInfo()
+    _serv_pas = ServicePassGen()
 
     def __init__(self) -> None:
         """Nova Fachada.
@@ -173,3 +176,19 @@ class Facade(IFacade):
         return self._serv_inf.delete_info(info=info)
 
     # Fim Info Part
+
+    # PassGen Part
+
+    def generate_password(self, passgen: PassGen) -> str:
+        """Gerar Nova Senha.
+
+        Args:
+            passgen (PassGen): Dados para que seja gerada
+            a senha.
+
+        Returns:
+            str: senha gerada ou None.
+        """
+        return self._serv_pas.generate_password(passgen=passgen)
+
+    # Fim PassGen Part
