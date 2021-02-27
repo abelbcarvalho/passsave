@@ -62,7 +62,7 @@ class Login(AbsModel):
 
     @email.setter
     def email(self, email: str) -> None:
-        return self._email
+        self._email = email
 
     @property
     def passw(self) -> str:

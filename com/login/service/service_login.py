@@ -82,7 +82,7 @@ class ServiceLogin(IServiceLogin):
         elif not self._checker_create_update(login=login):
             return False
         else:
-            sql = 'update tbLogin set nome=?,link=?,email=?,'
+            sql = 'update tbLogin set nome=?,link=?,user=?,email=?,'
             sql += 'passw=?,dia=?,mes=?,ano=?,id_acc=? where id=?'
             return self._dao.update_login(login=login, sql=sql)
 
@@ -150,7 +150,7 @@ class ServiceLogin(IServiceLogin):
             return False
         elif not PassCheck.verifica_senha_app(senha=login.passw, size=40):
             return False
-        elif DataCheck.is_valid_data(data=login.data):
+        elif not DataCheck.is_valid_data(data=login.data):
             return False
         elif not login.fk > 0:
             return False

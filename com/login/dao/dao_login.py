@@ -46,7 +46,8 @@ class DAOLogin(IDAOLogin):
             list: lista não nula se encontrado.
         """
         data = tuple(kwargs[i] for i in kwargs if i != 'sql')
-        return self._dao.read(kwargs['sql'], data)
+        return self._dao.read(kwargs['sql'], data) if data \
+            else self._dao.read(kwargs['sql'])
 
     def update_login(self, login: Login, sql='') -> bool:
         """Esse metodo tenta Atualizar Login.
