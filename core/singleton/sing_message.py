@@ -1,4 +1,4 @@
-from core.messsage.message import Message
+from core.message.message import Message
 
 
 class SingMessage:

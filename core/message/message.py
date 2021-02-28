@@ -51,6 +51,7 @@ class Message:
             'str': 'Erro: String Inválida.',
             'data': 'Erro: Data Inválida.',
             'instancia': 'Erro: Instancia Inválida',
+            'passw':'Erro: Senha Inválida.'
         }
         return error[key] if key in error.keys() else ''
 
