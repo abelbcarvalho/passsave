@@ -188,6 +188,19 @@ class Facade(IFacade):
         """
         return self._serv_inf.delete_info(info=info)
 
+    def delete_all_info(self, sql='', fk=0) -> bool:
+        """Esse metodo tenta deletar todas as infos
+        de logins de uma pessoa no aplicativo.
+
+        Args:
+            sql (str, optional): sql query. Defaults to ''.
+            fk (int, optional): chave estrangeira. Defaults to 0.
+
+        Returns:
+            bool: True se deletado.
+        """
+        return self._serv_inf.delete_all_info(sql=sql, fk=fk)
+
     # Fim Info Part
 
     # PassGen Part

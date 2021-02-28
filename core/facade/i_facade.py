@@ -64,6 +64,9 @@ class IFacade(metaclass=ABCMeta):
     def delete_info(self, info: Info) -> bool:
         pass
 
+    def delete_all_info(self, sql='', fk=0) -> bool:
+        pass
+
     # Fim de Info
 
     # PassGen Part

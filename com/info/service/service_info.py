@@ -4,6 +4,7 @@ from tools.general import is_none_empty
 from tools.general import is_great_than
 from tools.name_check import NameCheck
 from tools.data_check import DataCheck
+from com.info.dao.dao_info import DAOInfo
 
 
 class ServiceInfo(IServiceInfo):
@@ -22,6 +23,7 @@ class ServiceInfo(IServiceInfo):
         """Novo Service de Info.
         """
         super().__init__()
+        self._dao = DAOInfo()
 
     # metodos crud
 
@@ -39,6 +41,11 @@ class ServiceInfo(IServiceInfo):
             return False
         elif not self._checker_create_update(info=info):
             return False
+        else:
+            sql = 'insert into tbInfo ('
+            sql += 'comment,inform,dia,mes,ano,id_log) '
+            sql += 'values (?' + 5 * ',?' + ')'
+            return self._dao.create_info(info=info, sql=sql)
 
     def read_info(self, **kwargs) -> list:
         """Esse metodo servirá para realizar
@@ -66,6 +73,11 @@ class ServiceInfo(IServiceInfo):
             return False
         elif not self._checker_create_update(info=info):
             return False
+        else:
+            sql = 'update tbInfo set '
+            sql += 'coment=?,inform=?,dia=?,mes=?,ano=?,id_log=? '
+            sql += 'where id=?'
+            return self._dao.update_info(info=info, sql=sql)
 
     def delete_info(self, info: Info) -> bool:
         """Esse metodo tentará Deletar Info.
@@ -81,6 +93,30 @@ class ServiceInfo(IServiceInfo):
             return False
         elif not info.id > 0:
             return False
+        else:
+            sql = 'delete from tbInfo where id=?'
+            return self._dao.delete_info(info=info, sql=sql)
+
+    def delete_all_info(self, sql='', fk=0) -> bool:
+        """Esse metodo tenta deletar todas as infos
+        de logins de uma pessoa no aplicativo.
+
+        Args:
+            sql (str, optional): sql query. Defaults to ''.
+            fk (int, optional): chave estrangeira. Defaults to 0.
+
+        Returns:
+            bool: True se deletado.
+        """
+        if not sql or not fk:
+            return False
+        elif not isinstance(sql, str):
+            return False
+        elif not isinstance(fk, int):
+            return False
+        else:
+            sql =  'delete from tbInfo where id_log=?'
+            return self._dao.delete_all_info(sql=sql, fk=fk)
 
     # economizado linhas
 

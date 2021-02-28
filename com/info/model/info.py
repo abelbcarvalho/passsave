@@ -51,6 +51,7 @@ class Info(AbsModel):
         """
         self._inform = inform
 
+    @property
     def data(self) -> Data:
         """Retorna a data.
 
