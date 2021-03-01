@@ -9,6 +9,7 @@ from tools.general import is_none_empty
 from tools.name_check import NameCheck
 from com.login.model.login import Login
 from com.login.dao.dao_login import DAOLogin
+from core.singleton.sing_message import SingMessage as Msg
 
 
 class ServiceLogin(IServiceLogin):
@@ -42,6 +43,7 @@ class ServiceLogin(IServiceLogin):
             bool: True se for criado.
         """
         if not isinstance(login, Login):
+            Msg.message().setmessage(key='instancia')
             return False
         elif not self._checker_create_update(login=login):
             return False
@@ -49,7 +51,12 @@ class ServiceLogin(IServiceLogin):
             sql = 'insert into tbLogin ('
             sql += 'nome,link,user,email,passw,dia,mes,ano,id_acc) '
             sql += 'values (?' + 8 * ',?' + ')'
-            return self._dao.create_login(login=login, sql=sql)
+            if self._dao.create_login(login=login, sql=sql):
+                Msg.message().setmessage(key='login-c', sucesso=True)
+                return True
+            else:
+                Msg.message().setmessage(key='login-c')
+                return False
 
     def read_login(self, **kwargs) -> list:
         """Esse metodo servirá para realizar
@@ -59,11 +66,33 @@ class ServiceLogin(IServiceLogin):
             list: lista de Logins ou None.
         """
         if not kwargs:
+            Msg.message().mesg = 'Erro: Dados Inválidos.'
             return None
         elif not 'sql' in kwargs.keys():
+            Msg.message().mesg = 'Erro: Query SQL Não Encontrada.'
             return None
         else:
-            return self._dao.read_login(**kwargs)
+            data = self._dao.read_login(**kwargs)
+            if not data:
+                Msg.message().setmessage(key='login-s')
+                return None
+            else:
+                logins = []
+                Msg.message().setmessage(key='login-s', sucesso=True)
+                for log in data:
+                    logi = Login()
+                    logi.id = log[0]
+                    logi.nome = log[1]
+                    logi.link = log[2]
+                    logi.user = log[3]
+                    logi.email = log[4]
+                    logi.passw = log[5]
+                    logi.data.dia = log[6]
+                    logi.data.mes = log[7]
+                    logi.data.ano = log[8]
+                    logi.fk = log[9]
+                    logins.append(logi)
+                return logins
 
     def update_login(self, login: Login) -> bool:
         """Esse metodo tentará Atualizar Login.
@@ -76,15 +105,22 @@ class ServiceLogin(IServiceLogin):
             bool: True se for atualizado.
         """
         if not isinstance(login, Login):
+            Msg.message().setmessage(key='instancia')
             return False
         elif not login.id > 0:
+            Msg.message().setmessage(key='chave')
             return False
         elif not self._checker_create_update(login=login):
             return False
         else:
             sql = 'update tbLogin set nome=?,link=?,user=?,email=?,'
             sql += 'passw=?,dia=?,mes=?,ano=?,id_acc=? where id=?'
-            return self._dao.update_login(login=login, sql=sql)
+            if self._dao.update_login(login=login, sql=sql):
+                Msg.message().setmessage(key='login-u', sucesso=True)
+                return True
+            else:
+                Msg.message().setmessage(key='login-u')
+                return False
 
     def delete_login(self, login: Login) -> bool:
         """Esse metodo tentará Deletar Login.
@@ -97,12 +133,19 @@ class ServiceLogin(IServiceLogin):
             bool: True se for deletado.
         """
         if not isinstance(login, Login):
+            Msg.message().setmessage(key='instancia')
             return False
         elif not login.id > 0:
+            Msg.message().setmessage(key='chave')
             return False
         else:
-            sql =  'delete from tbLogin where id_acc=?'
-            return self._dao.delete_login(login=login, sql=sql)
+            sql =  'delete from tbLogin where id=?'
+            if self._dao.delete_login(login=login, sql=sql):
+                Msg.message().setmessage(key='login-d', sucesso=True)
+                return True
+            else:
+                Msg.message().setmessage(key='login-d')
+                return False
 
     def delete_all_login(self, sql='', fk=0) -> bool:
         """Esse metodo tenta deletar todas as contas
@@ -115,7 +158,7 @@ class ServiceLogin(IServiceLogin):
         Returns:
             bool: True se deletado.
         """
-        if not sql or not fk:
+        if not sql:
             return False
         elif not isinstance(sql, str):
             return False
@@ -135,24 +178,34 @@ class ServiceLogin(IServiceLogin):
             bool: True se tudo okay.
         """
         if is_none_empty(word=login.nome):
+            Msg.message().setmessage(key='str-size')
             return False
         elif not NameCheck.is_name_okay(word=login.nome):
+            Msg.message().mesg = 'Erro: Nome de Site.'
             return False
         elif is_great_than(word=login.nome, size=40):
+            Msg.message().setmessage(key='str-size')
             return False
         elif is_none_empty(word=login.link):
+            Msg.message().mesg = 'Erro: Link Vázio.'
             return False
         elif is_great_than(word=login.link, size=50):
+            Msg.message().setmessage(key='str-size')
             return False
         elif not UserCheck.validar_nome_usuario(usuario=login.user):
+            Msg.message().mesg = 'Erro: Nome de Usuário.'
             return False
         elif not EmailCheck.email_is_valid(email=login.email):
+            Msg.message().mesg = 'Erro: Email Inválido.'
             return False
         elif not PassCheck.verifica_senha_app(senha=login.passw, size=40):
+            Msg.message().setmessage(key='passw')
             return False
         elif not DataCheck.is_valid_data(data=login.data):
+            Msg.message().setmessage(key='data')
             return False
         elif not login.fk > 0:
+            Msg.message().setmessage(key='chave')
             return False
         else:
             return True
