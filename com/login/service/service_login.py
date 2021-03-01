@@ -10,6 +10,7 @@ from tools.name_check import NameCheck
 from com.login.model.login import Login
 from com.login.dao.dao_login import DAOLogin
 from core.singleton.sing_message import SingMessage as Msg
+from encript.encript import Encript
 
 
 class ServiceLogin(IServiceLogin):
@@ -29,6 +30,7 @@ class ServiceLogin(IServiceLogin):
         """
         super().__init__()
         self._dao = DAOLogin()
+        self._passw = 'g2ycveUijWE1cnRccO5QlRugjsDtY6'
 
     # metodos crud
 
@@ -72,6 +74,14 @@ class ServiceLogin(IServiceLogin):
             Msg.message().mesg = 'Erro: Query SQL Não Encontrada.'
             return None
         else:
+            encripted = {
+                i: Encript.encript(word=kwargs[i], passw=self._passw) \
+                    for i in kwargs.keys() if isinstance(kwargs[i], str) 
+            }
+            for i in encripted.keys():
+                kwargs[i] = encripted[i]
+            else:
+                encripted = None
             data = self._dao.read_login(**kwargs)
             if not data:
                 Msg.message().setmessage(key='login-s')
@@ -82,11 +92,11 @@ class ServiceLogin(IServiceLogin):
                 for log in data:
                     logi = Login()
                     logi.id = log[0]
-                    logi.nome = log[1]
-                    logi.link = log[2]
-                    logi.user = log[3]
-                    logi.email = log[4]
-                    logi.passw = log[5]
+                    logi.nome = Encript.decript(word=log[1], passw=self._passw)
+                    logi.link = Encript.decript(word=log[2], passw=self._passw)
+                    logi.user = Encript.decript(word=log[3], passw=self._passw)
+                    logi.email = Encript.decript(word=log[4], passw=self._passw)
+                    logi.passw = Encript.decript(word=log[5], passw=self._passw)
                     logi.data.dia = log[6]
                     logi.data.mes = log[7]
                     logi.data.ano = log[8]
@@ -208,4 +218,9 @@ class ServiceLogin(IServiceLogin):
             Msg.message().setmessage(key='chave')
             return False
         else:
+            login.nome = Encript.encript(word=login.nome, passw=self._passw)
+            login.link = Encript.encript(word=login.link, passw=self._passw)
+            login.user = Encript.encript(word=login.user, passw=self._passw)
+            login.email = Encript.encript(word=login.email, passw=self._passw)
+            login.passw = Encript.encript(word=login.passw, passw=self._passw)
             return True
