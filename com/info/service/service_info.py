@@ -6,6 +6,7 @@ from tools.name_check import NameCheck
 from tools.data_check import DataCheck
 from com.info.dao.dao_info import DAOInfo
 from core.singleton.sing_message import SingMessage as Msg
+from encript.encript import Encript
 
 
 class ServiceInfo(IServiceInfo):
@@ -25,6 +26,7 @@ class ServiceInfo(IServiceInfo):
         """
         super().__init__()
         self._dao = DAOInfo()
+        self._passw = 'uSRj5ZFduUSk1jTDmOWN0FTKUoRwTK'
 
     # metodos crud
 
@@ -68,6 +70,13 @@ class ServiceInfo(IServiceInfo):
             Msg.message().mesg = 'Erro: Query SQL Não Encontrada.'
             return None
         else:
+            encripted = {
+                i: Encript.encript(word=kwargs[i], passw=self._passw)
+                for i in kwargs.keys() if isinstance(kwargs[i], str)
+            }
+            if not not encripted:
+                for i in encripted.keys():
+                    kwargs[i] = encripted[i]
             data = self._dao.read_info(**kwargs)
             if not data:
                 Msg.message().setmessage(key='info-s')
@@ -78,8 +87,10 @@ class ServiceInfo(IServiceInfo):
                 for inf in data:
                     info = Info()
                     info.id = inf[0]
-                    info.comment = inf[1]
-                    info.inform = inf[2]
+                    info.comment = Encript.decript(
+                        word=inf[1], passw=self._passw)
+                    info.inform = Encript.decript(
+                        word=inf[2], passw=self._passw)
                     info.data.dia = inf[3]
                     info.data.mes = inf[4]
                     info.data.ano = inf[5]
@@ -159,7 +170,7 @@ class ServiceInfo(IServiceInfo):
         elif not isinstance(fk, int):
             return False
         else:
-            sql =  'delete from tbInfo where id_log=?'
+            sql = 'delete from tbInfo where id_log=?'
             return self._dao.delete_all_info(sql=sql, fk=fk)
 
     # economizado linhas
@@ -196,4 +207,7 @@ class ServiceInfo(IServiceInfo):
             Msg.message().setmessage(key='data')
             return False
         else:
+            info.comment = Encript.encript(
+                word=info.comment, passw=self._passw)
+            info.inform = Encript.encript(word=info.inform, passw=self._passw)
             return True

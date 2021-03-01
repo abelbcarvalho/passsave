@@ -75,8 +75,8 @@ class ServiceLogin(IServiceLogin):
             return None
         else:
             encripted = {
-                i: Encript.encript(word=kwargs[i], passw=self._passw) \
-                    for i in kwargs.keys() if isinstance(kwargs[i], str) 
+                i: Encript.encript(word=kwargs[i], passw=self._passw)
+                for i in kwargs.keys() if isinstance(kwargs[i], str)
             }
             for i in encripted.keys():
                 kwargs[i] = encripted[i]
@@ -95,8 +95,10 @@ class ServiceLogin(IServiceLogin):
                     logi.nome = Encript.decript(word=log[1], passw=self._passw)
                     logi.link = Encript.decript(word=log[2], passw=self._passw)
                     logi.user = Encript.decript(word=log[3], passw=self._passw)
-                    logi.email = Encript.decript(word=log[4], passw=self._passw)
-                    logi.passw = Encript.decript(word=log[5], passw=self._passw)
+                    logi.email = Encript.decript(
+                        word=log[4], passw=self._passw)
+                    logi.passw = Encript.decript(
+                        word=log[5], passw=self._passw)
                     logi.data.dia = log[6]
                     logi.data.mes = log[7]
                     logi.data.ano = log[8]
@@ -149,7 +151,7 @@ class ServiceLogin(IServiceLogin):
             Msg.message().setmessage(key='chave')
             return False
         else:
-            sql =  'delete from tbLogin where id=?'
+            sql = 'delete from tbLogin where id=?'
             if self._dao.delete_login(login=login, sql=sql):
                 Msg.message().setmessage(key='login-d', sucesso=True)
                 return True
@@ -175,7 +177,7 @@ class ServiceLogin(IServiceLogin):
         elif not isinstance(fk, int):
             return False
         else:
-            sql =  'delete from tbLogin where id_acc=?'
+            sql = 'delete from tbLogin where id_acc=?'
             return self._dao.delete_all_login(sql=sql, fk=fk)
 
     def _checker_create_update(self, login: Login) -> bool:
