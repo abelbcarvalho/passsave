@@ -49,9 +49,11 @@ class Message:
             'login-d': 'Erro: Login Não Deletada.',
             'info-d': 'Erro: Info Não Deletada.',
             'str': 'Erro: String Inválida.',
+            'str-size': 'Erro: String Tamanho Inválido.',
             'data': 'Erro: Data Inválida.',
             'instancia': 'Erro: Instancia Inválida',
-            'passw':'Erro: Senha Inválida.'
+            'passw': 'Erro: Senha Inválida.',
+            'chave': 'Erro: Chave de Acesso Inválida.'
         }
         return error[key] if key in error.keys() else ''
 
