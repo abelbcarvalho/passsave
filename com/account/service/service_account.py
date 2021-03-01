@@ -11,6 +11,7 @@ from tools.mobile_check import MobileCheck
 from com.account.model.account import Account
 from com.account.dao.dao_account import DAOAccount
 from core.singleton.sing_message import SingMessage as Msg
+from encript.encript import Encript
 
 
 class ServiceAccount(IServiceAccount):
@@ -30,6 +31,7 @@ class ServiceAccount(IServiceAccount):
         """
         super().__init__()
         self._dao = DAOAccount()
+        self._passw = 'Y80TWBImg1kCzOBkzlQYHYZaOh12UX'
 
     # metodos crud
 
@@ -67,7 +69,9 @@ class ServiceAccount(IServiceAccount):
         """Esse metodo tentará entrar no aplicativo
         com um dicionário como parametro - **kwargs
         deve existir:
-        - user, email, passw
+        - user,
+        - email,
+        - passw
 
         Returns:
             list: Account list se encontrado else None.
@@ -84,6 +88,9 @@ class ServiceAccount(IServiceAccount):
         elif not 'passw' in kwargs.keys():
             Msg.message().setmessage(key='passw')
             return None
+        kwargs['user'] = Encript.encript(word=kwargs['user'], passw=self._passw)
+        kwargs['email'] = Encript.encript(word=kwargs['email'], passw=self._passw)
+        kwargs['passw'] = Encript.encript(word=kwargs['passw'], passw=self._passw)
         sql = 'select * from tbAccount where (user=? '
         sql += 'or email=?) and passw=?'
         kwargs['sql'] = sql
@@ -97,15 +104,15 @@ class ServiceAccount(IServiceAccount):
             for acc in data:
                 account = Account()
                 account.id = acc[0]
-                account.nome = acc[1]
-                account.sexo = acc[2]
+                account.nome = Encript.decript(word=acc[1], passw=self._passw)
+                account.sexo = Encript.decript(word=acc[2], passw=self._passw)
                 account.nasc.dia = acc[3]
                 account.nasc.mes = acc[4]
                 account.nasc.ano = acc[5]
-                account.user = acc[6]
-                account.email = acc[7]
-                account.passw = acc[8]
-                account.mobile = acc[9]
+                account.user = Encript.decript(word=acc[6], passw=self._passw)
+                account.email = Encript.decript(word=acc[7], passw=self._passw)
+                account.passw = Encript.decript(word=acc[8], passw=self._passw)
+                account.mobile = Encript.decript(word=acc[9], passw=self._passw)
                 accounts.append(account)
             return accounts
 
@@ -216,4 +223,10 @@ class ServiceAccount(IServiceAccount):
             Msg.message().mesg = 'Erro: Celular Inválido.'
             return False
         else:
+            account.nome = Encript.encript(word=account.nome, passw=self._passw)
+            account.sexo = Encript.encript(word=account.sexo, passw=self._passw)
+            account.user = Encript.encript(word=account.user, passw=self._passw)
+            account.email = Encript.encript(word=account.nome, passw=self._passw)
+            account.passw = Encript.encript(word=account.passw, passw=self._passw)
+            account.mobile = Encript.encript(word=account.mobile, passw=self._passw)
             return True
