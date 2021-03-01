@@ -5,6 +5,7 @@ from tools.general import is_great_than
 from tools.name_check import NameCheck
 from tools.data_check import DataCheck
 from com.info.dao.dao_info import DAOInfo
+from core.singleton.sing_message import SingMessage as Msg
 
 
 class ServiceInfo(IServiceInfo):
@@ -38,6 +39,7 @@ class ServiceInfo(IServiceInfo):
             bool: True se for criado.
         """
         if not isinstance(info, Info):
+            Msg.message().setmessage(key='intance')
             return False
         elif not self._checker_create_update(info=info):
             return False
@@ -45,7 +47,12 @@ class ServiceInfo(IServiceInfo):
             sql = 'insert into tbInfo ('
             sql += 'comment,inform,dia,mes,ano,id_log) '
             sql += 'values (?' + 5 * ',?' + ')'
-            return self._dao.create_info(info=info, sql=sql)
+            if self._dao.create_info(info=info, sql=sql):
+                Msg.message().setmessage(key='info-c', sucesso=True)
+                return True
+            else:
+                Msg.message().setmessage(key='info-c')
+                return False
 
     def read_info(self, **kwargs) -> list:
         """Esse metodo servirá para realizar
@@ -55,7 +62,30 @@ class ServiceInfo(IServiceInfo):
             list: lista de Infos ou None.
         """
         if not kwargs:
+            Msg.message().mesg = 'Erro: Dados Inválidos.'
             return None
+        elif not 'sql' in kwargs.keys():
+            Msg.message().mesg = 'Erro: Query SQL Não Encontrada.'
+            return None
+        else:
+            data = self._dao.read_info(**kwargs)
+            if not data:
+                Msg.message().setmessage(key='info-s')
+                return None
+            else:
+                infos = []
+                Msg.message().setmessage(key='info-s', sucesso=True)
+                for inf in data:
+                    info = Info()
+                    info.id = inf[0]
+                    info.comment = inf[1]
+                    info.inform = inf[2]
+                    info.data.dia = inf[3]
+                    info.data.mes = inf[4]
+                    info.data.ano = inf[5]
+                    info.fk = inf[6]
+                    infos.append(info)
+                return infos
 
     def update_info(self, info: Info) -> bool:
         """Esse metodo tentará Atualizar Info.
@@ -68,8 +98,10 @@ class ServiceInfo(IServiceInfo):
             bool: True se for atualizado.
         """
         if not isinstance(info, Info):
+            Msg.message().setmessage(key='instancia')
             return False
         elif not info.id > 0:
+            Msg.message().setmessage(key='chave')
             return False
         elif not self._checker_create_update(info=info):
             return False
@@ -77,7 +109,12 @@ class ServiceInfo(IServiceInfo):
             sql = 'update tbInfo set '
             sql += 'coment=?,inform=?,dia=?,mes=?,ano=?,id_log=? '
             sql += 'where id=?'
-            return self._dao.update_info(info=info, sql=sql)
+            if self._dao.update_info(info=info, sql=sql):
+                Msg.message().setmessage(key='info-u', sucesso=True)
+                return True
+            else:
+                Msg.message().setmessage(key='info-u')
+                return False
 
     def delete_info(self, info: Info) -> bool:
         """Esse metodo tentará Deletar Info.
@@ -90,12 +127,19 @@ class ServiceInfo(IServiceInfo):
             bool: True se for deletado.
         """
         if not isinstance(info, Info):
+            Msg.message().setmessage(key='instancia')
             return False
         elif not info.id > 0:
+            Msg.message().setmessage(key='chave')
             return False
         else:
             sql = 'delete from tbInfo where id=?'
-            return self._dao.delete_info(info=info, sql=sql)
+            if self._dao.delete_info(info=info, sql=sql):
+                Msg.message().setmessage(key='info-d', sucesso=True)
+                return True
+            else:
+                Msg.message().setmessage(key='info-d')
+                return False
 
     def delete_all_info(self, sql='', fk=0) -> bool:
         """Esse metodo tenta deletar todas as infos
@@ -108,7 +152,7 @@ class ServiceInfo(IServiceInfo):
         Returns:
             bool: True se deletado.
         """
-        if not sql or not fk:
+        if not sql:
             return False
         elif not isinstance(sql, str):
             return False
@@ -131,18 +175,25 @@ class ServiceInfo(IServiceInfo):
             bool: True se a checagem foi okay.
         """
         if not info.fk > 0:
+            Msg.message().setmessage(key='chave')
             return False
         elif is_none_empty(word=info.comment):
+            Msg.message().setmessage(key='str')
             return False
         elif is_none_empty(word=info.inform):
+            Msg.message().setmessage(key='str')
             return False
         elif NameCheck.is_name_okay(word=info.comment):
+            Msg.message().mesg = 'Erro: Comentario Inválido.'
             return False
         elif is_great_than(word=info.comment, size=60):
+            Msg.message().setmessage(key='str-size')
             return False
         elif is_great_than(word=info.inform, size=216):
+            Msg.message().setmessage(key='str-size')
             return False
         elif not DataCheck.is_valid_data(data=info.data):
+            Msg.message().setmessage(key='data')
             return False
         else:
             return True
