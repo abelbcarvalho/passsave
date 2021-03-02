@@ -55,6 +55,10 @@ class ServiceAccount(IServiceAccount):
         if not self._cheker_for_create_update(account=account):
             return False
         else:
+            sql = 'select id from tbAccount where user=? or email=?'
+            if self._dao.thare_are_email_or_user(sql, account.user, account.email):
+                Msg.message().mesg = 'Erro: Usuário/E-Mail Existente.'
+                return False
             sql = 'insert into tbAccount ('
             sql += 'nome,sexo,dia,mes,ano,user,email,passw,mobile'
             sql += ') values (?' + ',?' * 8 + ')'

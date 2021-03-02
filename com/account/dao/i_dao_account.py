@@ -21,3 +21,6 @@ class IDAOAccount(metaclass=ABCMeta):
 
     def delete_account(self, account: Account, sql='') -> bool:
         pass
+
+    def thare_are_email_or_user(self, sql='', *args) -> list:
+        pass
