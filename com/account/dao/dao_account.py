@@ -81,3 +81,15 @@ class DAOAccount(IDAOAccount):
             bool: True se deletado.
         """
         return self._dao.delete(sql, account.id)
+
+    def thare_are_email_or_user(self, sql='', *args) -> list:
+        """Esse metodo verifica se existe email or user
+        já registrado.
+
+        Args:
+            sql (str, optional): sql query. Defaults to ''.
+
+        Returns:
+            list: lista de id or None.
+        """
+        return self._dao.read(sql, args)
