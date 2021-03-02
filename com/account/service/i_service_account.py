@@ -21,3 +21,6 @@ class IServiceAccount(metaclass=ABCMeta):
 
     def delete_account(self, account: Account) -> bool:
         pass
+
+    def recovery_account(self, account: Account) -> bool:
+        pass

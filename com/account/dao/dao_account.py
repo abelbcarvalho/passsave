@@ -93,3 +93,22 @@ class DAOAccount(IDAOAccount):
             list: lista de id or None.
         """
         return self._dao.read(sql, args)
+
+    def recovery_account(self, account: Account, sql='') -> bool:
+        """Esse metodo tentará Recuperar Account.
+        - passw;
+        - user;
+        - mobile;
+
+        Args:
+            account (Account): instância com dados
+            necessários.
+            sql (str): sql query.
+
+        Returns:
+            bool: True se for recuperado.
+        """
+        return self._dao.update(
+            sql, account.passw,
+            account.user, account.mobile
+        )
