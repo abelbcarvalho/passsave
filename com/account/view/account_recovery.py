@@ -1,5 +1,9 @@
+from tkinter import messagebox
 from tkinter import Tk, Frame, Label, Entry, Button
 from tkinter.constants import LEFT
+from com.account.model.account import Account
+from core.singleton.sing_message import SingMessage as Msg
+from core.singleton.sing_facade import SingFacade as Fac
 
 
 class AccountRecovery:
@@ -53,7 +57,7 @@ class AccountRecovery:
         self.label_tell['text'] = 'Telefone Celular'
         self.label_tell.pack(side=LEFT, padx=7)
 
-        # entry celular
+        # entry celular  # need mask
         self.entry_tell = Entry(self.frame_tell)
         self.entry_tell['font'] = self._font_pequena
         self.entry_tell['width'] = 23
@@ -68,7 +72,7 @@ class AccountRecovery:
         self.label_senha['text'] = 'Senha'
         self.label_senha.pack(side=LEFT, padx=7)
 
-        # entry senha
+        # entry senha  # need mask
         self.entry_senha = Entry(self.frame_senha)
         self.entry_senha['font'] = self._font_pequena
         self.entry_senha['width'] = 12
@@ -108,6 +112,7 @@ class AccountRecovery:
         self.butt_update['bg'] = '#1454a8'
         self.butt_update['fg'] = '#ffffff'
         self.butt_update['width'] = 10
+        self.butt_update.bind('<Button-1>', self._atualizando)
         self.butt_update.pack(side=LEFT, padx=7)
 
         # entrar
@@ -122,6 +127,24 @@ class AccountRecovery:
 
         # mostra janela
         self.window.mainloop()
+
+    def _atualizando(self, evt):
+        """Tentando atualizar senha.
+
+        Args:
+            evt (event): <Button-1>
+        """
+        if not self.entry_senha.get() == self.entry_confirm.get():
+            messagebox.showerror(message='Erro: Senhas Diferentes.')
+        else:
+            account = Account()
+            account.user = self.entry_user.get()
+            account.passw = self.entry_senha.get()
+            account.mobile = self.entry_tell.get()
+            if Fac.facade().recovery_account(account=account):
+                messagebox.showinfo(message=Msg.message().mesg)
+            else:
+                messagebox.showerror(message=Msg.message().mesg)
 
     def _back_to_entrar(self):
         """Volta para tela entrar.

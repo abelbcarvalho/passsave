@@ -1,6 +1,9 @@
 from tkinter import Tk, Frame, Entry, Label, Button
 from tkinter.ttk import Combobox
 from tkinter.constants import LEFT
+from com.account.model.account import Account
+from core.singleton.sing_message import SingMessage as Msg
+from core.singleton.sing_facade import SingFacade as Fac
 
 
 class AccountCreate:
@@ -72,6 +75,7 @@ class AccountCreate:
         self.data_label['text'] = 'Nasc.'
         self.data_label.pack(side=LEFT)
 
+        # data  # need mask
         self.data_entry = Entry(self.user_frame)
         self.data_entry['font'] = self._font_pequena
         self.data_entry['width'] = 10
@@ -100,6 +104,7 @@ class AccountCreate:
         self.label_senha['text'] = 'Senha'
         self.label_senha.pack(side=LEFT)
 
+        # senha  # need mask
         self.senha_entry = Entry(self.senha_frame)
         self.senha_entry['width'] = 19
         self.senha_entry['font'] = self._font_pequena
@@ -110,6 +115,7 @@ class AccountCreate:
         self.label_cel['font'] = self._font_pequena
         self.label_cel.pack(side=LEFT)
 
+        # celular  # need mask
         self.cel_entry = Entry(self.senha_frame)
         self.cel_entry['width'] = 14
         self.cel_entry['font'] = self._font_pequena
@@ -126,6 +132,7 @@ class AccountCreate:
         self.butt_create['bg'] = '#046910'
         self.butt_create['fg'] = '#ffffff'
         self.butt_create['width'] = 10
+        self.butt_create.bind('<Button-1>', self._registrando)
         self.butt_create.pack(side=LEFT, padx=7)
 
         # entrar
@@ -140,6 +147,22 @@ class AccountCreate:
 
         # mostra janela
         self.window.mainloop()
+
+    def _registrando(self, evt):
+        """Registrando conta.
+
+        Args:
+            evt (event): <Button-'>
+        """
+        account = Account()
+        account.nome = self.name_entry.get()
+        account.sexo = self.comb_sexo.get()
+        # usar mascara de texto para data
+        account.user = self.user_entry.get()
+        account.email = self.email_entry.get()
+        account.passw = self.senha_entry.get()  # need mask
+        account.mobile = self.cel_entry.get()  # need mask
+        # somente será feito o restante após adicionada as mascaras de texto
 
     def _back_to_access(self):
         """Esse metodo retorna para a tela

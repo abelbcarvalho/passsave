@@ -1,6 +1,9 @@
 from tkinter import Button, Entry, Label, Tk
-from tkinter import Frame
+from tkinter import Frame, messagebox
 from tkinter.constants import LEFT
+from com.account.model.account import Account
+from core.singleton.sing_message import SingMessage as Msg
+from core.singleton.sing_facade import SingFacade as Fac
 
 
 class AccountAccess:
@@ -54,7 +57,7 @@ class AccountAccess:
         self.label_pass['font'] = self._font_pequena
         self.label_pass.pack()
 
-        # entry password
+        # entry password  # need mask
         self.pass_entry = Entry(self.pass_frame)
         self.pass_entry['font'] = self._font_pequena
         self.pass_entry['width'] = 35
@@ -80,6 +83,7 @@ class AccountAccess:
         self.butt_entrar['bg'] = '#046910'
         self.butt_entrar['fg'] = '#ffffff'
         self.butt_entrar['width'] = 10
+        self.butt_entrar.bind('<Button-1>', self._entrando)
         self.butt_entrar.pack(side=LEFT, padx=7)
 
         # criar conta
@@ -94,6 +98,27 @@ class AccountAccess:
 
         # mostra janela
         self.window.mainloop()
+
+    def _entrando(self, evt):
+        """Tentando fazer login no aplicativo.
+
+        Args:
+            evt (event): <Button-1>
+        """
+        account = Account()
+        account.user = self.user_entry.get()
+        account.email = self.user_entry.get()
+        account.passw = self.pass_entry.get()  # need mask
+        data = Fac.facade().read_account(
+            user=account.user,
+            email=account.email,
+            passw=account.passw,
+        )
+        if not data:
+            messagebox.showerror(message=Msg.message().mesg)
+        else:
+            data = data[0]
+            messagebox.showinfo(message=Msg.message().mesg)
 
     def _go_to_create(self):
         """Ir para criar uma conta.
