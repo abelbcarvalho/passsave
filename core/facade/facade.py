@@ -77,6 +77,21 @@ class Facade(IFacade):
         """
         return self._serv_acc.delete_account(account=account)
 
+    def recovery_account(self, account: Account) -> bool:
+        """Esse metodo tentará Recuperar Account.
+        - passw;
+        - user;
+        - mobile;
+
+        Args:
+            account (Account): instância com dados
+            necessários.
+
+        Returns:
+            bool: True se for recuperado.
+        """
+        return self._serv_acc.recovery_account(self, account=account)
+
     # Fim Account Part
 
     # Login Part

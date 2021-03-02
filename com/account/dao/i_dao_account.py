@@ -24,3 +24,6 @@ class IDAOAccount(metaclass=ABCMeta):
 
     def thare_are_email_or_user(self, sql='', *args) -> list:
         pass
+
+    def recovery_account(self, account: Account, sql='') -> bool:
+        pass

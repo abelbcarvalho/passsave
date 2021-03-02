@@ -182,6 +182,45 @@ class ServiceAccount(IServiceAccount):
                 Msg.message().setmessage(key='account-d')
                 return False
 
+    def recovery_account(self, account: Account) -> bool:
+        """Esse metodo tentará Recuperar Account.
+        - passw;
+        - user;
+        - mobile;
+
+        Args:
+            account (Account): instância com dados
+            necessários.
+
+        Returns:
+            bool: True se for recuperado.
+        """
+        if not isinstance(account, Account):
+            Msg.message().setmessage(key='instancia')
+        elif not account.user.__len__() <= 256:
+            Msg.message().mesg = 'Erro: Usuário Inválido.'
+            return False
+        elif not PassCheck.verifica_senha_app(senha=account.passw):
+            Msg.message().setmessage(key='passw')
+            return False
+        elif not MobileCheck.mobile_valid(mobile=account.mobile):
+            Msg.message().mesg = 'Erro: Celular Inválido.'
+            return False
+        else:
+            account.user = Encript.encript(
+                word=account.user, passw=self._passw)
+            account.passw = Encript.encript(
+                word=account.passw, passw=self._passw)
+            account.mobile = Encript.encript(
+                word=account.mobile, passw=self._passw)
+            sql = 'update tbPerson set passw=? where user=? and mobile=?'
+            if self._dao.recovery_account(account=account, sql=sql):
+                Msg.message().mesg = 'Sucesso: Senha Atualizada.'
+                return True
+            else:
+                Msg.message().mesg = 'Erro: Senha Não Atualizada.'
+            
+
     def _cheker_for_create_update(self, account: Account) -> bool:
         """Esse metodo serve para economizar linhas de codigo
         entre create e update.
