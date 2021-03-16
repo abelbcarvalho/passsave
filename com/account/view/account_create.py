@@ -1,4 +1,5 @@
 from tkinter import Tk, Frame, Entry, Label, Button
+from tkinter import Checkbutton
 from tkinter.ttk import Combobox
 from tkinter.constants import LEFT
 from com.account.model.account import Account
@@ -75,10 +76,11 @@ class AccountCreate:
         self.data_label['text'] = 'Nasc.'
         self.data_label.pack(side=LEFT)
 
-        # data  # need mask
+        # data
         self.data_entry = Entry(self.user_frame)
         self.data_entry['font'] = self._font_pequena
         self.data_entry['width'] = 10
+        self.data_entry.bind('<KeyRelease>', self._data_mask_key_released)
         self.data_entry.pack(side=LEFT)
 
         # email ---
@@ -105,7 +107,7 @@ class AccountCreate:
         self.label_senha.pack(side=LEFT)
 
         # senha  # need mask
-        self.senha_entry = Entry(self.senha_frame)
+        self.senha_entry = Entry(self.senha_frame, show='*')
         self.senha_entry['width'] = 19
         self.senha_entry['font'] = self._font_pequena
         self.senha_entry.pack(side=LEFT)
@@ -119,7 +121,24 @@ class AccountCreate:
         self.cel_entry = Entry(self.senha_frame)
         self.cel_entry['width'] = 14
         self.cel_entry['font'] = self._font_pequena
+        self.cel_entry.bind('<KeyRelease>', self._mobile_mask_key_release)
         self.cel_entry.pack(side=LEFT)
+
+        # checkbutton mostrar senha ---------------
+        self.chk_frame = Frame(self.window)
+        self.chk_frame.pack()
+
+        # check button
+        from tkinter import IntVar
+        self._show_pass = IntVar()
+        self.chk_show = Checkbutton(
+            self.chk_frame,
+            text='Mostrar Senha',
+            variable=self._show_pass
+        )
+        self.chk_show['font'] = self._font_pequena
+        self.chk_show.bind('<Button-1>', self._mostra_senha)
+        self.chk_show.pack()
 
         # buttons ---------------------------------
         self.butt_frame = Frame(self.window)
@@ -174,3 +193,61 @@ class AccountCreate:
         from com.account.view.account_access import AccountAccess
         self.window.destroy()
         return AccountAccess()
+
+    def _mobile_mask_key_release(self, evt):
+        """Mascara para mobile. Define em
+        +0011222222222.
+
+        Args:
+            evt (event): <KeyRelease>
+        """
+        text = self.cel_entry.get()
+        try:
+            if text.__len__() == 1:
+                if text == '+':
+                    pass
+                else:
+                    int(text)
+                    text = '+' + text
+            elif text.__len__() < 15:
+                int(text[1:])
+            else:
+                text = text[:14]
+        except ValueError:
+            text = text[:-1]
+        finally:
+            self.cel_entry.delete(0, 'end')
+            self.cel_entry.insert(0, text)
+
+    def _data_mask_key_released(self, evt):
+        """Mascara para data. Define em dd/mm/aaaa.
+
+        Args:
+            evt (event): <KeyRelease>
+        """
+        text = self.data_entry.get()
+        try:
+            if text.__len__() <= 2:
+                int(text)
+                text += '/' if len(text) == 2 else ''
+            elif text.__len__() < 6:
+                int(text[3:])
+                text += '/' if len(text) == 5 else ''
+            elif text.__len__() <= 10:
+                int(text[6:])
+            else:
+                text = text[:10]
+        except ValueError:
+            text = text[:-1]
+        finally:
+            self.data_entry.delete(0, 'end')
+            self.data_entry.insert(0, text)
+
+    def _mostra_senha(self, evt):
+        """Mostra a senha ou oculta ela a depender.
+
+        Args:
+            evt ('<Button-1>'): evento clique de mouse.
+        """
+        self.senha_entry['show'] = '' \
+            if not self._show_pass.get() else '*'

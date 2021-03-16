@@ -57,8 +57,8 @@ class AccountAccess:
         self.label_pass['font'] = self._font_pequena
         self.label_pass.pack()
 
-        # entry password  # need mask
-        self.pass_entry = Entry(self.pass_frame)
+        # entry password
+        self.pass_entry = Entry(self.pass_frame, show='*')
         self.pass_entry['font'] = self._font_pequena
         self.pass_entry['width'] = 35
         self.pass_entry.pack()
