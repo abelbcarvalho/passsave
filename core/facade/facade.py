@@ -90,7 +90,7 @@ class Facade(IFacade):
         Returns:
             bool: True se for recuperado.
         """
-        return self._serv_acc.recovery_account(self, account=account)
+        return self._serv_acc.recovery_account(account=account)
 
     # Fim Account Part
 

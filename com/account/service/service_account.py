@@ -251,7 +251,7 @@ class ServiceAccount(IServiceAccount):
             return False
         elif not is_absolute_equal(word=account.sexo, compare='feminino') \
             and not is_absolute_equal(word=account.sexo, compare='masculino') \
-                and not is_absolute_equal(word=account.sexo, compare='hidden'):
+                and not is_absolute_equal(word=account.sexo, compare='not say'):
             Msg.message().mesg = 'Erro: Sexo Inválido.'
             return False
         elif not DataCheck.is_valid_data(data=account.nasc):

@@ -1,5 +1,5 @@
 from tkinter import Tk, Frame, Entry, Label, Button
-from tkinter import Checkbutton
+from tkinter import Checkbutton, messagebox
 from tkinter.ttk import Combobox
 from tkinter.constants import LEFT
 from com.account.model.account import Account
@@ -52,9 +52,10 @@ class AccountCreate:
         self.label_sexo.pack(side=LEFT)
 
         self.comb_sexo = Combobox(self.name_frame)
-        self.comb_sexo['values'] = ('hidden', 'masculino', 'feminino')
+        self.comb_sexo['values'] = ('not say', 'masculino', 'feminino')
         self.comb_sexo['width'] = 10
         self.comb_sexo['font'] = self._font_pequena
+        self.comb_sexo.current(0)
         self.comb_sexo.pack(side=LEFT)
 
         # ---- usuario e data de nascimento
@@ -63,7 +64,10 @@ class AccountCreate:
 
         self.user_label = Label(self.user_frame)
         self.user_label['font'] = self._font_pequena
-        self.user_label['text'] = 'Usuário'
+        self.user_label['text'] = 'Usuário'if self.data_entry.get().__len__() < 10:
+            messagebox.showwarning(
+                title='Problema com data', message='Informação de data incompleta!')
+            return
         self.user_label.pack(side=LEFT)
 
         self.user_entry = Entry(self.user_frame)
@@ -173,15 +177,27 @@ class AccountCreate:
         Args:
             evt (event): <Button-'>
         """
+        if self.data_entry.get().__len__() < 10:
+            messagebox.showwarning(
+                title='Problema com data', message='Informação de data incompleta!')
+            return
         account = Account()
         account.nome = self.name_entry.get()
         account.sexo = self.comb_sexo.get()
-        # usar mascara de texto para data
+        account.nasc.dia = int(self.data_entry.get()[: 2])
+        account.nasc.mes = int(self.data_entry.get()[3: 5])
+        account.nasc.ano = int(self.data_entry.get()[6:])
         account.user = self.user_entry.get()
         account.email = self.email_entry.get()
-        account.passw = self.senha_entry.get()  # need mask
-        account.mobile = self.cel_entry.get()  # need mask
+        account.passw = self.senha_entry.get()
+        account.mobile = self.cel_entry.get()
         # somente será feito o restante após adicionada as mascaras de texto
+        if Fac.facade().create_account(account=account):
+            messagebox.showinfo(title='Conta Registrada',
+                                message=Msg.message().mesg)
+        else:
+            messagebox.showerror(title='Conta Não Registrada',
+                                 message=Msg.message().mesg)
 
     def _back_to_access(self):
         """Esse metodo retorna para a tela
