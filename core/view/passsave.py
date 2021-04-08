@@ -1,5 +1,6 @@
 from tkinter import Tk, Frame, Label, Button, Menu
 from tkinter.ttk import Treeview
+from com.account.model.account import Account
 
 
 class PassSave:
@@ -14,9 +15,13 @@ class PassSave:
     _colunas_log = tuple(f'coluna-{i}' for i in range(7))
     _colunas_info = tuple(f'coluna-{i}' for i in range(5))
 
-    def __init__(self) -> None:
+    def __init__(self, account=Account()) -> None:
         """Construtor.
+
+        Args:
+            account (Account): carregar usuário do aplicativo.
         """
+        self._account = account
         self.window = Tk()
         self.window.title('Passsave - Gerencie Acesso')
         self.window.minsize(720, 512)

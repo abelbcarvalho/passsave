@@ -4,6 +4,7 @@ from tkinter.constants import LEFT
 from com.account.model.account import Account
 from core.singleton.sing_message import SingMessage as Msg
 from core.singleton.sing_facade import SingFacade as Fac
+from core.view.passsave import PassSave
 
 
 class AccountAccess:
@@ -119,6 +120,8 @@ class AccountAccess:
         else:
             data = data[0]
             messagebox.showinfo(message=Msg.message().mesg)
+            self.window.destroy()
+            PassSave(data)
 
     def _go_to_create(self):
         """Ir para criar uma conta.
