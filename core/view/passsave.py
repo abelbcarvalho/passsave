@@ -119,7 +119,3 @@ class PassSave:
         self.info_table.pack(padx=30, pady=10)
 
         self.window.mainloop()
-
-
-if __name__ == '__main__':
-    PassSave()
