@@ -28,9 +28,7 @@ class PassSave:
 
         self.menubar = Menu(self.window)
         self.filemenu = Menu(self.menubar)
-        self.filemenu.add_command(label='Abrir')
         self.filemenu.add_command(label='Perfil')
-        self.filemenu.add_command(label='Salvar')
         self.filemenu.add_command(label='Sair')
         self.menubar.add_cascade(label="Arquivo", menu=self.filemenu)
 
