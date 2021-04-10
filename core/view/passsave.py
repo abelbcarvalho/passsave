@@ -1,6 +1,10 @@
+from tkinter import Entry, Checkbutton
 from tkinter import Tk, Frame, Label, Button, Menu
 from tkinter.ttk import Treeview
+from tkinter.constants import LEFT, RIGHT
 from com.account.model.account import Account
+from com.passgen.view.genpass import GenPass
+from core.view.perfil import Perfil
 
 
 class PassSave:
@@ -28,7 +32,8 @@ class PassSave:
 
         self.menubar = Menu(self.window)
         self.filemenu = Menu(self.menubar)
-        self.filemenu.add_command(label='Perfil')
+        self.filemenu.add_command(label='Perfil', command=self._goto_perfil)
+        self.filemenu.add_command(label='Excluir Conta')
         self.filemenu.add_command(label='Sair')
         self.menubar.add_cascade(label="Arquivo", menu=self.filemenu)
 
@@ -38,7 +43,8 @@ class PassSave:
         self.menubar.add_cascade(label='Editar', menu=self.editmenu)
 
         self.toolmenu = Menu(self.menubar)
-        self.toolmenu.add_command(label='Gerador de Senha')
+        self.toolmenu.add_command(
+            label='Gerador de Senha', command=self._generate_pass)
         self.menubar.add_cascade(label='Ferramentas', menu=self.toolmenu)
 
         self.helpmenu = Menu(self.menubar)
@@ -55,6 +61,56 @@ class PassSave:
         self.title_label['font'] = self._font_default
         self.title_label['text'] = 'PassSave - Salve suas informarções de Login'
         self.title_label.pack()
+
+        self.pesq_log_frame = Frame(self.window)
+        self.pesq_log_frame.pack()
+
+        self.pesq_log_entry = Entry(self.pesq_log_frame)
+        self.pesq_log_entry['font'] = self._font_pequena
+        self.pesq_log_entry['width'] = 20
+        self.pesq_log_entry.pack(side=LEFT)
+
+        self.pesq_log_id_chk = Checkbutton(
+            self.pesq_log_frame,
+            text="Por ID",
+        )
+        self.pesq_log_id_chk['font'] = self._font_pequena
+        self.pesq_log_id_chk.pack(side=LEFT)
+
+        self.pesq_log_user_chk = Checkbutton(
+            self.pesq_log_frame,
+            text="Por Usuário",
+        )
+        self.pesq_log_user_chk['font'] = self._font_pequena
+        self.pesq_log_user_chk.pack(side=LEFT)
+
+        self.pesq_log_email_chk = Checkbutton(
+            self.pesq_log_frame,
+            text="Por E-Mail",
+        )
+        self.pesq_log_email_chk['font'] = self._font_pequena
+        self.pesq_log_email_chk.pack(side=LEFT)
+
+        self.pesq_log_data_chk = Checkbutton(
+            self.pesq_log_frame,
+            text="Por Data",
+        )
+        self.pesq_log_data_chk['font'] = self._font_pequena
+        self.pesq_log_data_chk.pack(side=LEFT)
+
+        self.pesq_log_mes_chk = Checkbutton(
+            self.pesq_log_frame,
+            text="Por Mês",
+        )
+        self.pesq_log_mes_chk['font'] = self._font_pequena
+        self.pesq_log_mes_chk.pack(side=LEFT)
+
+        self.pesq_log_ano_chk = Checkbutton(
+            self.pesq_log_frame,
+            text="Por Ano",
+        )
+        self.pesq_log_ano_chk['font'] = self._font_pequena
+        self.pesq_log_ano_chk.pack(side=LEFT)
 
         self.login_frame = Frame(self.window)
         self.login_frame.pack()
@@ -87,7 +143,42 @@ class PassSave:
         self.login_table.column(
             self._colunas_log[6], width=150, minwidth=70, stretch='NO')
         self.login_table.heading('#7', text='Data')
-        self.login_table.pack(padx=30, pady=10)
+        self.login_table.pack(padx=30)
+
+        self.button_frame = Frame(self.window)
+        self.button_frame.pack()
+
+        self.butt_create_info = Button(self.button_frame)
+        self.butt_create_info['width'] = 11
+        self.butt_create_info['font'] = self._font_pequena
+        self.butt_create_info['text'] = 'Novo Info'
+        self.butt_create_info['fg'] = '#ffffff'
+        self.butt_create_info['bg'] = '#002b36'
+        self.butt_create_info.pack(side=LEFT, pady=7, padx=7)
+
+        self.butt_delete_info = Button(self.button_frame)
+        self.butt_delete_info['width'] = 11
+        self.butt_delete_info['font'] = self._font_pequena
+        self.butt_delete_info['text'] = 'Delete Info'
+        self.butt_delete_info['fg'] = '#ffffff'
+        self.butt_delete_info['bg'] = '#d93a05'
+        self.butt_delete_info.pack(side=LEFT, pady=7, padx=7)
+
+        self.butt_delete_login = Button(self.button_frame)
+        self.butt_delete_login['width'] = 11
+        self.butt_delete_login['font'] = self._font_pequena
+        self.butt_delete_login['text'] = 'Delete Login'
+        self.butt_delete_login['fg'] = '#ffffff'
+        self.butt_delete_login['bg'] = '#d93a05'
+        self.butt_delete_login.pack(side=RIGHT, pady=7, padx=7)
+
+        self.butt_create_login = Button(self.button_frame)
+        self.butt_create_login['width'] = 11
+        self.butt_create_login['font'] = self._font_pequena
+        self.butt_create_login['text'] = 'Novo Login'
+        self.butt_create_login['fg'] = '#ffffff'
+        self.butt_create_login['bg'] = '#002b36'
+        self.butt_create_login.pack(side=RIGHT, pady=7, padx=7)
 
         self.info_frame = Frame(self.window)
         self.info_frame.pack()
@@ -103,10 +194,10 @@ class PassSave:
             self._colunas_info[0], width=70, minwidth=20, stretch='NO')
         self.info_table.heading('#1', text='ID')
         self.info_table.column(
-            self._colunas_info[1], width=150, minwidth=70, stretch='NO')
+            self._colunas_info[1], width=220, minwidth=200, stretch='NO')
         self.info_table.heading('#2', text='Token')
         self.info_table.column(
-            self._colunas_info[2], width=150, minwidth=70, stretch='NO')
+            self._colunas_info[2], width=220, minwidth=200, stretch='NO')
         self.info_table.heading('#3', text='Comentário')
         self.info_table.column(
             self._colunas_info[3], width=150, minwidth=70, stretch='NO')
@@ -117,3 +208,11 @@ class PassSave:
         self.info_table.pack(padx=30, pady=10)
 
         self.window.mainloop()
+
+    def _generate_pass(self) -> None:
+        """Chama tela de gerador de senha.
+        """
+        GenPass()
+    
+    def _goto_perfil(self) -> None:
+        Perfil(account=self._account)

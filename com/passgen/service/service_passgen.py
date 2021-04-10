@@ -29,6 +29,8 @@ class ServicePassGen(IServicePassGen):
         """
         if not isinstance(passgen, PassGen):
             return ''
+        if not passgen.size > 0:
+            return ''
         invalid = 0
         if not passgen.numbers:
             invalid += 1
@@ -42,7 +44,5 @@ class ServicePassGen(IServicePassGen):
             invalid += 1
         if not passgen.symbol_3:
             invalid += 1
-        if not passgen.size > 0:
-            invalid += 1
-        return '' if invalid == 7 else \
+        return '' if invalid == 6 else \
             self._pass.generate_password(passgen=passgen)

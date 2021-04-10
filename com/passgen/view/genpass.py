@@ -23,6 +23,11 @@ class GenPass:
         self.window.minsize(512, 370)
         self.window.maxsize(512, 370)
 
+        # variaveis que mostra se os checkbuttons
+        # foram selecionados
+        self.num_sel = self.up_sel = self.low_sel = False
+        self.sim_1 = self.sim_2 = self.sim_3 = False
+
         self.main_frame = Frame(self.window)
         self.main_frame.pack()
 
@@ -42,60 +47,52 @@ class GenPass:
         self.size_spin['width'] = 25
         self.size_spin.pack()
 
-        from tkinter import IntVar
-        self._num_var = IntVar()
-        self._let_up = IntVar()
-        self._let_low = IntVar()
-        self._sim_1 = IntVar()
-        self._sim_2 = IntVar()
-        self._sim_3 = IntVar()
-
         self.numeros_chk = Checkbutton(
             self.main_frame,
             text="Números",
-            variable=self._num_var
         )
         self.numeros_chk['font'] = self._font_pequena
+        self.numeros_chk.bind('<Button-1>', self._select_num_on_off)
         self.numeros_chk.pack()
 
         self.letras_up_chk = Checkbutton(
             self.main_frame,
             text="Letras Maíusculas",
-            variable=self._let_up
         )
         self.letras_up_chk['font'] = self._font_pequena
+        self.letras_up_chk.bind('<Button-1>', self._select_let_up_on_off)
         self.letras_up_chk.pack()
 
         self.letras_low_chk = Checkbutton(
             self.main_frame,
             text="Letras Minúsculas",
-            variable=self._let_low
         )
         self.letras_low_chk['font'] = self._font_pequena
+        self.letras_low_chk.bind('<Button-1>', self._select_let_low_on_off)
         self.letras_low_chk.pack()
 
         self.simbolos_1_chk = Checkbutton(
             self.main_frame,
             text='Conjunto Simbólico 1',
-            variable=self._sim_1
         )
         self.simbolos_1_chk['font'] = self._font_pequena
+        self.simbolos_1_chk.bind('<Button-1>', self._select_sim_1_on_off)
         self.simbolos_1_chk.pack()
 
         self.simbolos_2_chk = Checkbutton(
             self.main_frame,
             text='Conjunto Simbólico 2',
-            variable=self._sim_2
         )
         self.simbolos_2_chk['font'] = self._font_pequena
+        self.simbolos_2_chk.bind('<Button-1>', self._select_sim_2_on_off)
         self.simbolos_2_chk.pack()
 
         self.simbolos_3_chk = Checkbutton(
             self.main_frame,
             text='Conjunto Simbólico 3',
-            variable=self._sim_3
         )
         self.simbolos_3_chk['font'] = self._font_pequena
+        self.simbolos_3_chk.bind('<Button-1>', self._select_sim_3_on_off)
         self.simbolos_3_chk.pack()
 
         self.senha_entry = Entry(self.main_frame)
@@ -114,6 +111,86 @@ class GenPass:
 
         self.window.mainloop()
 
+    # metodos de seleciona ou não
+
+    def _select_num_on_off(self, evt) -> None:
+        """Seleciona ou não checkbutton numeros.
+
+        Args:
+            evt (mouse): <Button-1>
+        """
+        if not self.num_sel:
+            self.numeros_chk.deselect()
+            self.num_sel = True
+        else:
+            self.num_sel = False
+            self.numeros_chk.select()
+
+    def _select_let_up_on_off(self, evt) -> None:
+        """Seleciona ou não checkbutton letras maiusculas.
+
+        Args:
+            evt (mouse): <Button-1>
+        """
+        if not self.up_sel:
+            self.letras_up_chk.deselect()
+            self.up_sel = True
+        else:
+            self.up_sel = False
+            self.letras_up_chk.select()
+
+    def _select_let_low_on_off(self, evt) -> None:
+        """Seleciona ou não checkbutton letras minusculas.
+
+        Args:
+            evt (mouse): <Button-1>
+        """
+        if not self.low_sel:
+            self.low_sel = True
+            self.letras_low_chk.deselect()
+        else:
+            self.low_sel = False
+            self.letras_low_chk.select()
+
+    def _select_sim_1_on_off(self, evt) -> None:
+        """Seleciona ou não checkbutton simbolos 1.
+
+        Args:
+            evt (mouse): <Button-1>
+        """
+        if not self.sim_1:
+            self.sim_1 = True
+            self.simbolos_1_chk.deselect()
+        else:
+            self.sim_1 = False
+            self.simbolos_1_chk.select()
+
+    def _select_sim_2_on_off(self, evt) -> None:
+        """Seleciona ou não checkbutton simbolos 2.
+
+        Args:
+            evt (mouse): <Button-1>
+        """
+        if not self.sim_2:
+            self.sim_2 = True
+            self.simbolos_2_chk.deselect()
+        else:
+            self.sim_2 = False
+            self.simbolos_2_chk.select()
+
+    def _select_sim_3_on_off(self, evt) -> None:
+        """Seleciona ou não checkbutton simbolos 3.
+
+        Args:
+            evt (mouse): <Button-1>
+        """
+        if not self.sim_3:
+            self.sim_3 = True
+            self.simbolos_3_chk.deselect()
+        else:
+            self.sim_3 = False
+            self.simbolos_3_chk.select()
+
     def _gerar_senha(self, evt) -> None:
         """Metodo que representa a ação do butão
         gerar senha.
@@ -122,12 +199,12 @@ class GenPass:
             evt (event): <Button-1>
         """
         self.password.size = int(self.size_spin.get())
-        self.password.numbers = True if self._num_var.get() == 1 else False
-        self.password.upcase = True if self._let_up.get() == 1 else False
-        self.password.lowcase = True if self._let_low.get() == 1 else False
-        self.password.symbol_1 = True if self._sim_1.get() == 1 else False
-        self.password.symbol_2 = True if self._sim_2.get() == 1 else False
-        self.password.symbol_3 = True if self._sim_3.get() == 1 else False
+        self.password.numbers = self.num_sel
+        self.password.upcase = self.up_sel
+        self.password.lowcase = self.low_sel
+        self.password.symbol_1 = self.sim_1
+        self.password.symbol_2 = self.sim_2
+        self.password.symbol_3 = self.sim_3
         self.senha_entry.delete(0, 'end')
         self.senha_entry.insert(
             0, Fac.facade().generate_password(passgen=self.password))
