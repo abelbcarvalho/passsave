@@ -3,7 +3,9 @@ from tkinter import Tk, Frame, Label, Button, Menu
 from tkinter.ttk import Treeview
 from tkinter.constants import LEFT, RIGHT
 from com.account.model.account import Account
+from com.login.model.login import Login
 from com.passgen.view.genpass import GenPass
+from com.login.view.logincreate import LoginCreate
 from core.view.perfil import Perfil
 
 
@@ -26,6 +28,9 @@ class PassSave:
             account (Account): carregar usuário do aplicativo.
         """
         self._account = account
+        self._login = Login()
+        self._login.fk = self._account.id
+        # onde tudo começa
         self.window = Tk()
         self.window.title('Passsave - Gerencie Acesso')
         self.window.minsize(720, 512)
@@ -178,6 +183,7 @@ class PassSave:
         self.butt_create_login['text'] = 'Novo Login'
         self.butt_create_login['fg'] = '#ffffff'
         self.butt_create_login['bg'] = '#002b36'
+        self.butt_create_login.bind('<Button-1>', self._create_login)
         self.butt_create_login.pack(side=RIGHT, pady=7, padx=7)
 
         self.info_frame = Frame(self.window)
@@ -215,4 +221,15 @@ class PassSave:
         GenPass()
     
     def _goto_perfil(self) -> None:
+        """Vai para tela de possíveis edições
+        na conta do aplicativo.
+        """
         Perfil(account=self._account)
+    
+    def _create_login(self, evt) -> None:
+        """Chama tela de criar Login.
+
+        Args:
+            evt (mouse): <Button-1>
+        """
+        LoginCreate(login=self._login)
