@@ -4,8 +4,10 @@ from tkinter.ttk import Treeview
 from tkinter.constants import LEFT, RIGHT
 from com.account.model.account import Account
 from com.login.model.login import Login
+from com.info.model.info import Info
 from com.passgen.view.genpass import GenPass
 from com.login.view.logincreate import LoginCreate
+from com.info.view.infocreate import InfoCreate
 from core.view.perfil import Perfil
 
 
@@ -29,7 +31,9 @@ class PassSave:
         """
         self._account = account
         self._login = Login()
+        self._info = Info()
         self._login.fk = self._account.id
+        self._info.fk = self._login.fk
         # onde tudo começa
         self.window = Tk()
         self.window.title('Passsave - Gerencie Acesso')
@@ -159,6 +163,7 @@ class PassSave:
         self.butt_create_info['text'] = 'Novo Info'
         self.butt_create_info['fg'] = '#ffffff'
         self.butt_create_info['bg'] = '#002b36'
+        self.butt_create_info.bind('<Button-1>', self._create_info)
         self.butt_create_info.pack(side=LEFT, pady=7, padx=7)
 
         self.butt_delete_info = Button(self.button_frame)
@@ -233,3 +238,12 @@ class PassSave:
             evt (mouse): <Button-1>
         """
         LoginCreate(login=self._login)
+    
+    def _create_info(self, evt) -> None:
+        """Chama a tela de criar Info.
+
+        Args:
+            evt (mouse): <Button-1>
+        """
+        InfoCreate(info=self._info)
+

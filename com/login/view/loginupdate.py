@@ -177,7 +177,7 @@ class LoginUpdate:
         self._login.data.mes = int(self.data_entry.get()[3: 5])
         self._login.data.ano = int(self.data_entry.get()[6:])
         # tentativa de registro na base de dados
-        if Fac.facade().create_login(login=self._login):
+        if Fac.facade().update_login(login=self._login):
             messagebox.showinfo(title='Login Registrado',
                                 message=Msg.message().mesg)
             self.window.destroy()
