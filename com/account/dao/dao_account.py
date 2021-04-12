@@ -35,7 +35,7 @@ class DAOAccount(IDAOAccount):
             sql,
             account.nome, account.sexo, account.nasc.dia,
             account.nasc.mes, account.nasc.ano, account.user,
-            account.email, account.passw, account.mobile,
+            account.email, account.passw, account.mobile
         )
 
     def read_account(self, **kwargs) -> list:
@@ -82,17 +82,18 @@ class DAOAccount(IDAOAccount):
         """
         return self._dao.delete(sql, account.id)
 
-    def thare_are_email_or_user(self, sql='', *args) -> list:
+    def thare_are_email_or_user(self, sql='', dados=()) -> list:
         """Esse metodo verifica se existe email or user
         já registrado.
 
         Args:
             sql (str, optional): sql query. Defaults to ''.
+            dados (tuple, optional): tupla de dados. Defaults to ().
 
         Returns:
             list: lista de id or None.
         """
-        return self._dao.read(sql, args)
+        return self._dao.read(sql, dados[0], dados[1])
 
     def recovery_account(self, account: Account, sql='') -> bool:
         """Esse metodo tentará Recuperar Account.

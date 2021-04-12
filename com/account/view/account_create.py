@@ -64,10 +64,7 @@ class AccountCreate:
 
         self.user_label = Label(self.user_frame)
         self.user_label['font'] = self._font_pequena
-        self.user_label['text'] = 'Usuário'if self.data_entry.get().__len__() < 10:
-            messagebox.showwarning(
-                title='Problema com data', message='Informação de data incompleta!')
-            return
+        self.user_label['text'] = 'Usuário'
         self.user_label.pack(side=LEFT)
 
         self.user_entry = Entry(self.user_frame)

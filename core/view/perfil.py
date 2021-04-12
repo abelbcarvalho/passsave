@@ -42,6 +42,7 @@ class Perfil:
         self.name_entry = Entry(self.main_frame)
         self.name_entry['width'] = 40
         self.name_entry['font'] = self._font_pequena
+        self.name_entry.insert(0, self._account.nome)
         self.name_entry['state'] = DISABLED
         self.name_entry.pack()
 
@@ -54,6 +55,11 @@ class Perfil:
         self.sexo_combo['values'] = ('not say', 'masculino', 'feminino')
         self.sexo_combo['width'] = 39
         self.sexo_combo['font'] = self._font_pequena
+        self.sexo_combo.current(
+            0 if self._account.sexo == 'not say' \
+                else 1 if self._account.sexo == 'masculino' \
+                    else 2 if self._account.sexo == 'feminino' else -1
+        )
         self.sexo_combo['state'] = DISABLED
         self.sexo_combo.pack()
 
@@ -66,6 +72,7 @@ class Perfil:
         self.data_entry['font'] = self._font_pequena
         self.data_entry['width'] = 40
         self.data_entry.bind('<KeyRelease>', self._data_mask_key_released)
+        self.data_entry.insert(0, self._account.nasc)
         self.data_entry['state'] = DISABLED
         self.data_entry.pack()
 
@@ -77,6 +84,7 @@ class Perfil:
         self.user_entry = Entry(self.main_frame)
         self.user_entry['width'] = 40
         self.user_entry['font'] = self._font_pequena
+        self.user_entry.insert(0, self._account.user)
         self.user_entry['state'] = DISABLED
         self.user_entry.pack()
 
@@ -88,6 +96,7 @@ class Perfil:
         self.email_entry = Entry(self.main_frame)
         self.email_entry['width'] = 40
         self.email_entry['font'] = self._font_pequena
+        self.email_entry.insert(0, self._account.email)
         self.email_entry['state'] = DISABLED
         self.email_entry.pack()
 
@@ -99,6 +108,7 @@ class Perfil:
         self.senha_entry = Entry(self.main_frame)
         self.senha_entry['font'] = self._font_pequena
         self.senha_entry['width'] = 40
+        self.senha_entry.insert(0, self._account.passw)
         self.senha_entry['state'] = DISABLED
         self.senha_entry.pack()
 
@@ -110,6 +120,7 @@ class Perfil:
         self.mobile_entry = Entry(self.main_frame)
         self.mobile_entry['font'] = self._font_pequena
         self.mobile_entry['width'] = 40
+        self.mobile_entry.insert(0, self._account.mobile)
         self.mobile_entry['state'] = DISABLED
         self.mobile_entry.bind('<KeyRelease>', self._mobile_mask_key_release)
         self.mobile_entry.pack()

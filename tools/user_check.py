@@ -53,7 +53,7 @@ class UserCheck:
             todos += (num, )
         for num in letras_1:
             todos += (num, )
-        return todos
+        return todos + ('_', )
 
     @classmethod
     def _is_valid_username_text(cls, validos=(), usuario=()) -> bool:

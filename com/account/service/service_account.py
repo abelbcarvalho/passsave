@@ -56,7 +56,8 @@ class ServiceAccount(IServiceAccount):
             return False
         else:
             sql = 'select id from tbAccount where user=? or email=?'
-            if self._dao.thare_are_email_or_user(sql, account.user, account.email):
+            teste = self._dao.thare_are_email_or_user(sql, (account.user, account.email))
+            if teste:
                 Msg.message().mesg = 'Erro: Usuário/E-Mail Existente.'
                 return False
             sql = 'insert into tbAccount ('
@@ -219,7 +220,6 @@ class ServiceAccount(IServiceAccount):
                 return True
             else:
                 Msg.message().mesg = 'Erro: Senha Não Atualizada.'
-            
 
     def _cheker_for_create_update(self, account: Account) -> bool:
         """Esse metodo serve para economizar linhas de codigo
@@ -277,7 +277,7 @@ class ServiceAccount(IServiceAccount):
             account.user = Encript.encript(
                 word=account.user, passw=self._passw)
             account.email = Encript.encript(
-                word=account.nome, passw=self._passw)
+                word=account.email, passw=self._passw)
             account.passw = Encript.encript(
                 word=account.passw, passw=self._passw)
             account.mobile = Encript.encript(
